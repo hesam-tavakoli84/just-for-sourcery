@@ -2,9 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 coin_count = int(input())
 move_count = int(input())
-moves = []
-for i in range(move_count):
-    moves.append(int(input()))
+moves = [int(input()) for _ in range(move_count)]
 states = ['gray'] * coin_count
 win_color = 'green'
 lose_color = 'red'
