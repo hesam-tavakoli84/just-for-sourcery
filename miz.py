@@ -6,14 +6,9 @@ states = []
 moves = list(map(int, input().split()))
 
 for i in range(n):
-    win = False
     print(f"{i}: ", end="")
 
-    for k in moves:
-        if i - k >= 0 and states[i - k] == "L":
-            win = True
-            break
-
+    win = any(i - k >= 0 and states[i - k] == "L" for k in moves)
     state = "W" if win else "L"
     states.append(state)
     print(state)
