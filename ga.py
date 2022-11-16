@@ -62,18 +62,10 @@ def mutation(individual):
 
 
 def fitness(message, target):
-    value = 0
-    for i, actual in enumerate(target):
-        value += 1 if message[i] == actual else 0
-
-    return value
+    return sum(1 if message[i] == actual else 0 for i, actual in enumerate(target))
 
 def evaluate(population, target):
-    fitness_values = []
-    for individual in population:
-        fitness_values.append(fitness(individual, target))
-
-    return fitness_values
+    return [fitness(individual, target) for individual in population]
 
 def selection(population, fitness_values):
     results = []
@@ -120,19 +112,19 @@ if __name__ == "__main__":
     mutation_rate = args.mutation_rate
     population_size = args.population_size
     crossover = crossover_operators[args.crossover]
-    for i in range(population_size):
+    for _ in range(population_size):
         message = [random.choice(alphabet) for _ in range(len(target))]
         population.append(message)
 
     counter = 0
-    print("Target = {}\n".format(target))
+    print(f"Target = {target}\n")
 
     while True:
         counter += 1
         fitness_values = evaluate(population, target)
         max_index, max_value = arg_max(fitness_values)
         best = ''.join(population[max_index])
-        print("Generation {}: {} ({})".format(counter, best, max_value))
+        print(f"Generation {counter}: {best} ({max_value})")
 
         if best == target:
             break
@@ -147,7 +139,5 @@ if __name__ == "__main__":
             if random.random() < mutation_rate:
                 mutation(child2)
 
-            new_population.append(child1)
-            new_population.append(child2)
-
+            new_population.extend((child1, child2))
         population = tournament(population + new_population, target, population_size)
